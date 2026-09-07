@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JouwRit | Taxi boeken</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #1d1d1d;
+    }
+
+    header {
+      background: #202020;
+      color: white;
+      padding: 22px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 800;
+      color: #ffd400;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #252525, #444);
+      color: white;
+      padding: 55px 7%;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 span {
+      color: #ffd400;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #e7e7e7;
+    }
+
+    .car {
+      margin-top: 30px;
+      font-size: 80px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: -25px auto 50px;
+      padding: 0 18px;
+    }
+
+    .booking-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.12);
+    }
+
+    .booking-card h2 {
+      margin-bottom: 24px;
+      font-size: 27px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #d8d8d8;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      background: white;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .choice-box {
+      display: flex;
+      gap: 15px;
+    }
+
+    .choice {
+      flex: 1;
+      background: #f6f6f6;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .choice input {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      border: 0;
+      border-radius: 12px;
+      background: #ffd400;
+      color: #161616;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #efc800;
+    }
+
+    #result {
+      display: none;
+      margin-top: 22px;
+      background: #f6f6f6;
+      border-radius: 12px;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    .price {
+      font-size: 29px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .hero h1 {
+        font-size: 33px;
+      }
+
+      .booking-card {
+        padding: 22px;
+      }
+
+      .choice-box {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">JouwRit</div>
+  <a href="#boeken">Rit boeken</a>
+</header>
+
+<section class="hero">
+  <h1>Jouw rit. <span>Jouw keuze.</span></h1>
+  <p>Comfortabel, betrouwbaar en eenvoudig een taxi boeken.</p>
+  <div class="car">🚕</div>
+</section>
+
+<div class="container" id="boeken">
+
+  <div class="booking-card">
+
+    <h2>Boek jouw rit</h2>
+
+    <form id="bookingForm">
+
+      <div class="grid">
+
+        <div class="full">
+          <label for="pickup">📍 Ophaallocatie</label>
+          <input
+            id="pickup"
+            type="text"
+            placeholder="Bijvoorbeeld: Eindhoven Centraal"
+            required
+          >
+        </div>
+
+        <div class="full">
+          <label for="destination">🏁 Bestemming</label>
+          <input
+            id="destination"
+            type="text"
+            placeholder="Waar wil je naartoe?"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="date">Datum</label>
+          <input id="date" type="date" required>
+        </div>
+
+        <div>
+          <label for="time">Tijd</label>
+          <input id="time" type="time" required>
+        </div>
+
+        <div>
+          <label for="passengers">Passagiers</label>
+          <select id="passengers">
+            <option value="1">1 passagier</option>
+            <option value="2">2 passagiers</option>
+            <option value="3">3 passagiers</option>
+            <option value="4">4 passagiers</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="luggage">Bagage</label>
+          <select id="luggage">
+            <option value="0">Geen bagage</option>
+            <option value="1">1 stuk</option>
+            <option value="2">2 stuks</option>
+            <option value="3">3 stuks</option>
+            <option value="4">4+ stuks</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="airport">Luchthavenrit?</label>
+          <select id="airport" onchange="toggleFlight()">
+            <option value="no">Nee</option>
+            <option value="yes">Ja</option>
+          </select>
+        </div>
+
+        <div id="flightBox" style="display:none;">
+          <label for="flight">Vluchtnummer</label>
+          <input
+            id="flight"
+            type="text"
+            placeholder="Bijvoorbeeld KL1234"
+          >
+        </div>
+
+        <div class="full">
+          <label>Prijskeuze</label>
+
+          <div class="choice-box">
+
+            <label class="choice">
+              <input type="radio" name="priceType" value="fixed" checked>
+              Prijs vooraf
+            </label>
+
+            <label class="choice">
+              <input type="radio" name="priceType" value="meter">
+              Op de meter
+            </label>
+
+          </div>
+        </div>
+
+        <div class="full">
+          <label for="extra">Extra informatie</label>
+          <textarea
+            id="extra"
+            placeholder="Bijvoorbeeld kinderzitje, veel bagage, speciale wensen..."
+          ></textarea>
+        </div>
+
+      </div>
+
+      <button type="submit">Bereken mijn rit</button>
+
+    </form>
+
+    <div id="result">
+      <strong>Geschatte ritprijs</strong>
+
+      <div class="price" id="price">€ --</div>
+
+      <div id="routeInfo"></div>
+
+      <div class="note">
+        De uiteindelijke prijs kan veranderen door verkeer,
+        wachttijd of wijzigingen aan de rit.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 JouwRit · Taxi Eindhoven
+</footer>
+
+<script>
+
+  const START_TARIFF = 4.02;
+  const PRICE_PER_KM = 2.96;
+  const PRICE_PER_MINUTE = 0.49;
+
+  function toggleFlight() {
+    const airport = document.getElementById("airport").value;
+    document.getElementById("flightBox").style.display =
+      airport === "yes" ? "block" : "none";
+  }
+
+  document.getElementById("bookingForm").addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+      const pickup =
+        document.getElementById("pickup").value;
+
+      const destination =
+        document.getElementById("destination").value;
+
+      const priceType =
+        document.querySelector(
+          'input[name="priceType"]:checked'
+        ).value;
+
+      const result =
+        document.getElementById("result");
+
+      const price =
+        document.getElementById("price");
+
+      const routeInfo =
+        document.getElementById("routeInfo");
+
+      result.style.display = "block";
+
+      if (priceType === "meter") {
+
+        price.innerText = "Op de meter";
+
+        routeInfo.innerHTML =
+          "De rit wordt volgens het geldende taxitarief afgerekend.";
+
+        return;
+      }
+
+      price.innerText = "Route berekenen...";
+      routeInfo.innerHTML = "";
+
+      try {
+
+        /*
+          In de volgende stap verbinden we hier
+          veilig OpenRouteService.
+
+          De API-key komt NIET in deze openbare
+          GitHub-pagina.
+        */
+
+        const response = await fetch(
+          "/api/route?pickup=" +
+          encodeURIComponent(pickup) +
+          "&destination=" +
+          encodeURIComponent(destination)
+        );
+
+        if (!response.ok) {
+          throw new Error("Route kon niet worden berekend.");
+        }
+
+        const data = await response.json();
+
+        const km = data.distanceKm;
+        const minutes = data.durationMinutes;
+
+        const estimatedPrice =
+          START_TARIFF +
+          (PRICE_PER_KM * km) +
+          (PRICE_PER_MINUTE * minutes);
+
+        price.innerText =
+          "€ " + estimatedPrice.toFixed(2);
+
+        routeInfo.innerHTML =
+          "Afstand: <strong>" +
+          km.toFixed(1) +
+          " km</strong><br>" +
+          "Geschatte reistijd: <strong>" +
+          Math.round(minutes) +
+          " minuten</strong>";
+
+      }
+
+      catch (error) {
+
+        price.innerText = "Nog niet verbonden";
+
+        routeInfo.innerHTML =
+          "De bookingpagina werkt. In de volgende stap verbinden we de routeberekening met OpenRouteService.";
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
