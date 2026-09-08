@@ -191,18 +191,52 @@ async function calculateRoute(){
 }
 
 function submitBooking(){
-  const required=[['pickup','Ophaallocatie'],['destination','Bestemming'],['date','Datum'],['time','Tijd'],['name','Naam'],['phone','Telefoonnummer']];
+  const required=[
+    ['pickup','Ophaallocatie'],
+    ['destination','Bestemming'],
+    ['date','Datum'],
+    ['time','Tijd'],
+    ['name','Naam'],
+    ['phone','Telefoonnummer']
+  ];
+
   for(const [id,label] of required){
     if(!document.getElementById(id).value.trim()){
       document.getElementById('result').textContent='Vul eerst '+label+' in.';
-      document.getElementById(id).focus(); return;
+      document.getElementById(id).focus();
+      return;
     }
   }
+
   if(!window.jouwritRoute){
     document.getElementById('result').textContent='Bereken eerst de route en prijs.';
     return;
   }
-  document.getElementById('result').textContent='Bookinggegevens zijn klaar. De volgende stap is ze naar jouw telefoon/boekingssysteem sturen.';
+
+  const value=id=>document.getElementById(id)?.value?.trim()||'-';
+  const rit=window.jouwritRoute;
+  const prijskeuze=new URLSearchParams(window.location.search).get('priceType')==='fixed'
+    ? 'Vaste prijs'
+    : 'Taximeter';
+
+  const bericht=`🚕 NIEUWE JOUWRIT AANVRAAG
+
+👤 Naam: ${value('name')}
+📞 Telefoon: ${value('phone')}
+✉️ E-mail: ${value('email')}
+
+📍 Ophalen: ${rit.pickup}
+🏁 Bestemming: ${rit.destination}
+📅 Datum: ${value('date')}
+🕐 Tijd: ${value('time')}
+
+🛣️ Afstand: ${rit.km.toFixed(1)} km
+⏱️ Geschatte reistijd: ${Math.round(rit.min)} minuten
+💶 Geschatte ritprijs: €${rit.price.toFixed(2).replace('.',',')}
+💳 Prijskeuze: ${prijskeuze}`;
+
+  document.getElementById('result').textContent='WhatsApp wordt geopend...';
+  window.open('https://wa.me/31629098099?text='+encodeURIComponent(bericht),'_blank');
 }
 </script>
 </body>
