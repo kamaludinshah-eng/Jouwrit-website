@@ -101,12 +101,6 @@ function toggleAirport(show){document.getElementById('airportFields').classList.
 function toggleChildren(show){document.getElementById('childrenFields').classList.toggle('hidden',!show)}
 function togglePrice(){document.getElementById('fixedInfo').classList.toggle('hidden',document.querySelector('input[name=priceType]:checked').value!=='fixed')}
 
-function addressLabel(properties){
-  const first=[properties.name,properties.street,properties.housenumber].filter(Boolean).join(' ');
-  const second=[properties.postcode,properties.city||properties.town||properties.village,properties.state].filter(Boolean).join(' ');
-  return {short:first||second||'Adres',full:[first,second,'Nederland'].filter(Boolean).join(', ')};
-}
-
 function attachAutocomplete(inputId){
   const input=document.getElementById(inputId);
   const list=document.getElementById(inputId+'Suggestions');
@@ -123,30 +117,29 @@ function attachAutocomplete(inputId){
     timer=setTimeout(async()=>{
       controller=new AbortController();
       try{
-        const url='https://photon.komoot.io/api/?lang=nl&limit=6&lat=51.4416&lon=5.4697&q='+encodeURIComponent(query);
+        const url='https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&countrycodes=nl&q='+encodeURIComponent(query);
         const response=await fetch(url,{signal:controller.signal});
         if(!response.ok) return;
         const data=await response.json();
         close();
-        for(const feature of data.features||[]){
-          const p=feature.properties||{};
-          if(p.countrycode && p.countrycode.toUpperCase()!=='NL') continue;
-          const label=addressLabel(p);
+        for(const result of data||[]){
+          const p=result.address||{};
+          const titleText=[p.road||p.pedestrian||p.square||result.name,p.house_number].filter(Boolean).join(' ') || result.display_name.split(',')[0];
           const button=document.createElement('button');
           button.type='button'; button.className='suggestion'; button.setAttribute('role','option');
-          const title=document.createElement('strong'); title.textContent=label.short;
-          const detail=document.createElement('small'); detail.textContent=label.full;
+          const title=document.createElement('strong'); title.textContent=titleText;
+          const detail=document.createElement('small'); detail.textContent=result.display_name;
           button.append(title,detail);
           button.addEventListener('click',()=>{
-            input.value=label.full;
-            input.dataset.lon=feature.geometry.coordinates[0];
-            input.dataset.lat=feature.geometry.coordinates[1];
+            input.value=result.display_name;
+            input.dataset.lon=result.lon;
+            input.dataset.lat=result.lat;
             close(); input.focus();
           });
           list.appendChild(button);
         }
       }catch(error){if(error.name!=='AbortError') close();}
-    },350);
+    },900);
   });
   input.addEventListener('keydown',event=>{if(event.key==='Escape') close();});
   document.addEventListener('click',event=>{if(!input.parentElement.contains(event.target)) close();});
