@@ -229,6 +229,14 @@ function submitBooking(){
 🏁 Bestemming: ${rit.destination}
 📅 Datum: ${value('date')}
 🕐 Tijd: ${value('time')}
+👥 Personen: ${value('passengers')}
+🧳 Bagage: ${value('luggage')}
+✈️ Airportrit: ${document.querySelector('input[name="airport"]:checked')?.value==='yes'?'Ja':'Nee'}
+🏢 Airport: ${value('airport')}
+🛬 Vluchtnummer: ${value('flight')}
+🔄 Vluchttype: ${value('flightType')}
+🕐 Vluchttijd: ${value('flightTime')}
+📝 Extra informatie: ${value('extra')}
 
 🛣️ Afstand: ${rit.km.toFixed(1)} km
 ⏱️ Geschatte reistijd: ${Math.round(rit.min)} minuten
