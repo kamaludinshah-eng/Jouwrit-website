@@ -70,6 +70,25 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
       </div>
       <div id="fixedInfo" class="note hidden">Een vaste prijs wordt na controle van de route vooraf bepaald.</div>
     </div>
+    <div class="section">
+  <h2>💳 Betaalmethode</h2>
+  <div class="choice">
+    <label id="onlinePayment" class="hidden">
+      <input type="radio" name="paymentMethod" value="Online betalen na bevestiging">
+      <span><b>Online betalen</b><br><small>iDEAL, Apple Pay of kaart — na bevestiging</small></span>
+    </label>
+
+    <label>
+      <input type="radio" name="paymentMethod" value="Pinnen in de taxi" checked>
+      <span><b>Pinnen in de taxi</b><br><small>Betalen bij de chauffeur</small></span>
+    </label>
+
+    <label>
+      <input type="radio" name="paymentMethod" value="Contant betalen">
+      <span><b>Contant betalen</b><br><small>Betalen bij de chauffeur</small></span>
+    </label>
+  </div>
+</div>
 
     <div class="section">
       <h2>💬 Extra informatie</h2>
@@ -100,6 +119,19 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
 function toggleAirport(show){document.getElementById('airportFields').classList.toggle('hidden',!show)}
 function toggleChildren(show){document.getElementById('childrenFields').classList.toggle('hidden',!show)}
 function togglePrice(){document.getElementById('fixedInfo').classList.toggle('hidden',document.querySelector('input[name=priceType]:checked').value!=='fixed')}
+  function togglePaymentOptions(){
+  const isFixed=document.querySelector('input[name="priceType"]:checked').value==='fixed';
+  const online=document.getElementById('onlinePayment');
+  online.classList.toggle('hidden',!isFixed);
+
+  if(!isFixed && online.querySelector('input').checked){
+    document.querySelector('input[name="paymentMethod"][value="Pinnen in de taxi"]').checked=true;
+  }
+}
+
+document.querySelectorAll('input[name="priceType"]').forEach(input=>{
+  input.addEventListener('change',togglePaymentOptions);
+});
 
 function attachAutocomplete(inputId){
   const input=document.getElementById(inputId);
@@ -215,9 +247,8 @@ function submitBooking(){
 
   const value=id=>document.getElementById(id)?.value?.trim()||'-';
   const rit=window.jouwritRoute;
-  const prijskeuze=new URLSearchParams(window.location.search).get('priceType')==='fixed'
-    ? 'Vaste prijs'
-    : 'Taximeter';
+ const prijskeuze=document.querySelector('input[name="priceType"]:checked').value==='fixed' ? 'Vaste prijs' : 'Taximeter';
+  const betaalmethode=document.querySelector('input[name="paymentMethod"]:checked').value;
 
 const bericht=`NIEUWE JOUWRIT AANVRAAG
 
@@ -225,6 +256,7 @@ KLANTGEGEVENS
 Naam: ${value('name')}
 Telefoon: ${value('phone')}
 E-mail: ${value('email')}
+Betaalmethode: ${betaalmethode}
 
 RITGEGEVENS
 Ophalen: ${rit.pickup}
