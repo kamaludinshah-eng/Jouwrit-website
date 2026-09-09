@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="JouwRit: betrouwbaar taxivervoer in Eindhoven en omgeving.">
+  <title>JouwRit | Taxi Eindhoven</title>
+
+  <style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      color:#172033;
+      background:#f7f8fa
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1120px,calc(100% - 32px));margin:auto}
+
+    header{
+      background:#111827;
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:10;
+      border-bottom:1px solid rgba(255,255,255,.1)
+    }
+    nav{
+      min-height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-size:22px;
+      font-weight:800
+    }
+    .logo{
+      width:44px;
+      height:44px;
+      display:grid;
+      place-items:center;
+      border:3px solid #ffd400;
+      border-radius:50%;
+      color:#ffd400;
+      font-size:15px
+    }
+    .brand span{color:#ffd400}
+    .navlinks{display:flex;align-items:center;gap:24px}
+    .navlinks a{font-size:15px;color:#e5e7eb}
+    .navlinks a:hover{color:#ffd400}
+
+    .button{
+      display:inline-flex;
+      justify-content:center;
+      align-items:center;
+      min-height:50px;
+      padding:0 24px;
+      border-radius:10px;
+      background:#ffd400;
+      color:#172033;
+      font-weight:800
+    }
+    .button.secondary{
+      background:transparent;
+      color:white;
+      border:1px solid rgba(255,255,255,.35)
+    }
+
+    .hero{
+      min-height:570px;
+      display:flex;
+      align-items:center;
+      color:white;
+      background:
+        radial-gradient(circle at 78% 42%,rgba(255,212,0,.16),transparent 26%),
+        linear-gradient(135deg,#111827,#1d2940 62%,#111827)
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      align-items:center;
+      gap:56px
+    }
+    .eyebrow{
+      color:#ffd400;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:13px
+    }
+    h1{
+      margin:14px 0 18px;
+      max-width:700px;
+      font-size:clamp(42px,6vw,72px);
+      line-height:1.02
+    }
+    .hero p{
+      max-width:610px;
+      margin:0 0 28px;
+      color:#d6dae3;
+      font-size:19px;
+      line-height:1.65
+    }
+    .hero-buttons{display:flex;flex-wrap:wrap;gap:12px}
+
+    .hero-card{
+      padding:34px;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:24px;
+      background:rgba(255,255,255,.07);
+      box-shadow:0 24px 70px rgba(0,0,0,.25)
+    }
+    .hero-card .car{
+      display:grid;
+      place-items:center;
+      height:190px;
+      margin-bottom:22px;
+      border-radius:18px;
+      color:#ffd400;
+      background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.03));
+      font-size:82px
+    }
+    .hero-card h2{margin:0 0 10px;font-size:25px}
+    .hero-card p{margin:0;font-size:15px}
+
+    .trust{
+      background:white;
+      border-bottom:1px solid #e5e7eb
+    }
+    .trust-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      text-align:center
+    }
+    .trust-item{padding:24px;border-right:1px solid #e5e7eb}
+    .trust-item:last-child{border-right:0}
+    .trust-item strong{display:block;margin-bottom:6px}
+    .trust-item span{color:#687386;font-size:14px}
+
+    section{padding:82px 0}
+    .section-heading{max-width:650px;margin-bottom:34px}
+    .section-heading h2{margin:8px 0 14px;font-size:clamp(30px,4vw,44px)}
+    .section-heading p{margin:0;color:#687386;line-height:1.7}
+
+    .airport-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:center;
+      gap:54px
+    }
+    .airport-box{
+      min-height:330px;
+      padding:36px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      border-radius:24px;
+      color:white;
+      background:linear-gradient(145deg,#1c2940,#111827)
+    }
+    .airport-box .icon{font-size:58px;margin-bottom:auto}
+    .airport-box h3{margin:0 0 10px;font-size:28px}
+    .airport-box p{margin:0;color:#d6dae3;line-height:1.6}
+
+    .services{background:white}
+    .service-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px
+    }
+    .service-card{
+      padding:28px;
+      border:1px solid #e5e7eb;
+      border-radius:18px;
+      background:#fff
+    }
+    .service-card .icon{font-size:31px}
+    .service-card h3{margin:18px 0 10px}
+    .service-card p{margin:0;color:#687386;line-height:1.6}
+
+    .cta{padding-top:0}
+    .cta-box{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:28px;
+      padding:42px;
+      border-radius:24px;
+      color:white;
+      background:#172033
+    }
+    .cta-box h2{margin:0 0 10px;font-size:32px}
+    .cta-box p{margin:0;color:#d6dae3}
+
+    footer{
+      padding:28px 0;
+      color:#687386;
+      background:white;
+      border-top:1px solid #e5e7eb
+    }
+    .footer-grid{
+      display:flex;
+      justify-content:space-between;
+      gap:20px
+    }
+
+    @media(max-width:800px){
+      .navlinks a:not(.button){display:none}
+      .hero{padding:70px 0}
+      .hero-grid,.airport-grid{grid-template-columns:1fr}
+      .hero-card{display:none}
+      .trust-grid,.service-grid{grid-template-columns:1fr}
+      .trust-item{border-right:0;border-bottom:1px solid #e5e7eb}
+      .cta-box,.footer-grid{align-items:flex-start;flex-direction:column}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="container">
+      <a class="brand" href="home.html">
+        <span class="logo">JR</span>
+        <span>JouwRit</span>
+      </a>
+
+      <div class="navlinks">
+        <a href="#luchthaven">Luchthavenvervoer</a>
+        <a href="#service">Onze service</a>
+        <a href="https://wa.me/31629098099">Contact</a>
+        <a class="button" href="index.html">Plan je rit</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Taxi Eindhoven en omgeving</div>
+          <h1>Uw rit begint bij JouwRit.</h1>
+          <p>
+            Comfortabel en betrouwbaar taxivervoer voor dagelijkse ritten,
+            zakelijke afspraken en luchthavenvervoer.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="button" href="index.html">Plan je rit</a>
+            <a class="button secondary" href="https://wa.me/31629098099">
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="car">🚕</div>
+          <h2>Direct een rit aanvragen</h2>
+          <p>
+            Bereken de route, kies Taximeter of Vaste prijs en verstuur uw
+            aanvraag rechtstreeks via WhatsApp.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust">
+      <div class="container trust-grid">
+        <div class="trust-item">
+          <strong>Betrouwbaar</strong>
+          <span>Duidelijke afspraken vooraf</span>
+        </div>
+        <div class="trust-item">
+          <strong>Comfortabel</strong>
+          <span>Een moderne elektrische taxi</span>
+        </div>
+        <div class="trust-item">
+          <strong>Persoonlijk</strong>
+          <span>Rechtstreeks contact met de chauffeur</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="luchthaven">
+      <div class="container airport-grid">
+        <div class="airport-box">
+          <div class="icon">✈️</div>
+          <h3>Luchthavenvervoer</h3>
+          <p>
+            Vervoer van en naar Eindhoven Airport en andere luchthavens,
+            afgestemd op uw vlucht en bagage.
+          </p>
+        </div>
+
+        <div class="section-heading">
+          <div class="eyebrow">Rustig op reis</div>
+          <h2>Op tijd naar de luchthaven</h2>
+          <p>
+            Geef bij uw aanvraag het vliegveld, vluchtnummer en de aankomst-
+            of vertrektijd door. Zo heeft de chauffeur direct de belangrijkste
+            informatie.
+          </p>
+          <br>
+          <a class="button" href="index.html">Plan luchthavenrit</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="service" class="services">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Onze service</div>
+          <h2>Eenvoudig en persoonlijk geregeld</h2>
+          <p>
+            Vraag uw rit online aan en ontvang zo snel mogelijk een bevestiging.
+          </p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card">
+            <div class="icon">📍</div>
+            <h3>Ritten in de regio</h3>
+            <p>Comfortabel vervoer in Eindhoven en omgeving.</p>
+          </article>
+
+          <article class="service-card">
+            <div class="icon">💼</div>
+            <h3>Zakelijk vervoer</h3>
+            <p>Representatief vervoer voor afspraken en bedrijven.</p>
+          </article>
+
+          <article class="service-card">
+            <div class="icon">💬</div>
+            <h3>Direct contact</h3>
+            <p>Uw aanvraag gaat rechtstreeks naar de chauffeur via WhatsApp.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <h2>Klaar om uw rit te plannen?</h2>
+            <p>Bereken uw route en verstuur direct uw aanvraag.</p>
+          </div>
+          <a class="button" href="index.html">Plan je rit</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <strong>JouwRit</strong>
+      <span>Taxi Eindhoven en omgeving</span>
+    </div>
+  </footer>
+</body>
+</html>
