@@ -68,6 +68,7 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
         <label><input type="radio" name="priceType" value="meter" checked onchange="togglePrice()"><span><b>Taximeter</b><br><small>€4,31 + €3,17/km + €0,52/min</small></span></label>
         <label><input type="radio" name="priceType" value="fixed" onchange="togglePrice()"><span><b>Vaste prijs</b><br><small>Prijs vooraf berekend</small></span></label>
       </div>
+      <div id="meterInfo" class="note"><strong>Let op:</strong> Dit is een geschatte taximeterprijs. De uiteindelijke ritprijs wordt bepaald door de taximeter en kan afwijken door verkeersdrukte, omleidingen, wachttijd of andere vertragingen.</div>
       <div id="fixedInfo" class="note hidden">Een vaste prijs wordt na controle van de route vooraf bepaald.</div>
     </div>
     <div class="section">
@@ -123,6 +124,7 @@ function togglePrice(){document.getElementById('fixedInfo').classList.toggle('hi
   const isFixed=document.querySelector('input[name="priceType"]:checked').value==='fixed';
   const online=document.getElementById('onlinePayment');
   online.classList.toggle('hidden',!isFixed);
+    document.getElementById('meterInfo').classList.toggle('hidden',isFixed);
 
   if(!isFixed && online.querySelector('input').checked){
     document.querySelector('input[name="paymentMethod"][value="Pinnen in de taxi"]').checked=true;
