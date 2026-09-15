@@ -1,290 +1,160 @@
 <!doctype html>
 <html lang="nl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JouwRit – Plan Je Rit</title>
-<style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#172033}
-.wrap{max-width:980px;margin:30px auto;padding:0 16px}
-.card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
-h1{margin:0 0 6px;font-size:30px}.sub{color:#697386;margin-bottom:24px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.full{grid-column:1/-1}
-label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
-input,select,textarea{width:100%;padding:13px 14px;border:1px solid #d9dde5;border-radius:10px;font-size:15px;background:#fff}
-.autocomplete{position:relative}
-.suggestions{position:absolute;z-index:20;top:100%;left:0;right:0;margin-top:5px;background:#fff;border:1px solid #d9dde5;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,.13);overflow:hidden}
-.suggestions:empty{display:none}
-.suggestion{width:100%;margin:0;padding:12px 14px;border:0;border-bottom:1px solid #edf0f4;border-radius:0;background:#fff;color:#172033;text-align:left;font-size:14px;font-weight:400;cursor:pointer}
-.suggestion:last-child{border-bottom:0}.suggestion:hover,.suggestion:focus{background:#fff6cc;outline:none}
-.suggestion strong{display:block;margin-bottom:3px}.suggestion small{display:block;color:#697386;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-textarea{min-height:110px;resize:vertical}
-.section{border-top:1px solid #e7e9ee;margin-top:22px;padding-top:22px}
-.section h2{font-size:19px;margin:0 0 16px}
-.choice{display:flex;gap:10px}.choice label{flex:1;margin:0}
-.choice input{display:none}.choice span{display:block;border:1px solid #d9dde5;border-radius:10px;padding:13px;text-align:center;cursor:pointer}
-.choice input:checked+span{border-color:#f4c400;background:#fff6cc}
-.hidden{display:none}
-.price{margin-top:22px;background:#f7f8fa;border-radius:14px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:15px}
-.price strong{font-size:25px}.muted{color:#697386;font-size:13px}
-button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;background:#f4c400;color:#111;font-size:17px;font-weight:800;cursor:pointer}
-.note{font-size:13px;color:#697386;margin-top:10px;line-height:1.5}
-@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.card{padding:20px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="JouwRit — comfortabel en betrouwbaar taxivervoer in Eindhoven en omgeving.">
+  <title>JouwRit | Taxi Eindhoven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%230a1e42' stroke='%23ffd21f' stroke-width='4'/%3E%3Cpath d='M14 38h36l-4-12a6 6 0 0 0-6-4H24a6 6 0 0 0-6 4z' fill='white'/%3E%3Ccircle cx='21' cy='40' r='5' fill='%23ffd21f'/%3E%3Ccircle cx='43' cy='40' r='5' fill='%23ffd21f'/%3E%3C/svg%3E">
+  <style>
+    :root{--navy:#071c40;--navy2:#102b5f;--yellow:#ffd21f;--yellow2:#ffdf58;--ink:#0a1d43;--muted:#50658a;--line:#d8deea;--white:#fff}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#f8fafc;color:var(--ink);font-family:Inter,Arial,sans-serif}
+    button,input{font:inherit}
+    .hero{height:61vh;min-height:480px;position:relative;color:#fff;background:linear-gradient(90deg,rgba(2,18,46,.56) 0%,rgba(2,18,46,.15) 45%,rgba(2,18,46,0) 70%),url('assets/jouwrit-hero.png') center/cover no-repeat}
+    .hero-inner{width:min(1320px,calc(100% - 48px));height:100%;margin:auto;position:relative}
+    .topbar{height:158px;display:flex;align-items:flex-start;justify-content:space-between}
+    .brand{width:142px;height:142px;overflow:hidden;border-radius:50%;margin-top:10px;box-shadow:0 8px 28px rgba(0,0,0,.24)}
+    .brand img{width:100%;height:100%;object-fit:cover;transform:scale(1.1)}
+    nav{display:flex;gap:62px;margin:56px 31% 0 0;font-weight:700;font-size:18px}
+    nav a{color:#fff;text-decoration:none;padding:0 0 13px;position:relative;text-shadow:0 2px 7px rgba(0,0,0,.5)}
+    nav a.active{color:var(--yellow)}
+    nav a.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--yellow);border-radius:4px}
+    .hero-copy{width:520px;margin-top:-3px}
+    h1{font-size:64px;line-height:.98;letter-spacing:-3px;margin:0 0 17px;font-weight:800}
+    h1 span{color:var(--yellow)}
+    .tagline{font-size:18px;line-height:1.45;margin:0 0 20px;color:#f2f5fb}
+    .phone{display:inline-flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font-size:21px;font-weight:700}
+    .phone svg{width:27px;height:27px;background:#fff;color:var(--navy);padding:6px;border-radius:50%}
+    .content{position:relative;background:#fff;min-height:330px}
+    .content-inner{width:min(1340px,calc(100% - 48px));margin:auto;position:relative;min-height:330px}
+    .booking-layout{position:absolute;left:0;right:0;top:-90px;display:grid;grid-template-columns:610px 1fr;gap:28px;align-items:start}
+    .planner{background:linear-gradient(135deg,var(--yellow2),var(--yellow));border-radius:14px;padding:18px 24px 16px;box-shadow:0 10px 26px rgba(24,37,65,.16)}
+    .planner h2{font-size:31px;margin:0 0 12px;letter-spacing:-1px}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
+    .field-wrap{position:relative}
+    .field-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#60708f;width:18px;height:18px;z-index:2}
+    input{width:100%;height:48px;border:0;border-radius:7px;padding:0 13px 0 45px;color:var(--ink);background:#fff;outline:none;box-shadow:inset 0 0 0 1px rgba(9,29,67,.1)}
+    input:focus{box-shadow:0 0 0 3px rgba(9,29,67,.2)}
+    .suggestions{display:none;position:absolute;z-index:10;top:54px;left:0;right:0;background:#fff;border-radius:8px;box-shadow:0 10px 28px rgba(7,28,64,.18);overflow:hidden;max-height:210px;overflow-y:auto}
+    .suggestions.open{display:block}
+    .suggestion{padding:11px 13px;border-bottom:1px solid #eef1f6;cursor:pointer;font-size:13px;line-height:1.3}
+    .suggestion:hover,.suggestion:focus{background:#fff8cf}
+    .calculate{width:100%;height:49px;border:0;border-radius:7px;margin-top:14px;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;font-weight:800;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:18px}
+    .calculate:hover{filter:brightness(1.12)}
+    .calculate:disabled{opacity:.65;cursor:wait}
+    .right-panel{padding-top:94px}
+    .trust{display:grid;grid-template-columns:1fr 1fr 1.15fr;align-items:center}
+    .trust-item{min-height:62px;display:flex;align-items:center;gap:13px;padding:0 18px;border-right:1px solid var(--line);font-weight:700;font-size:15px}
+    .trust-item:last-child{border-right:0}
+    .icon-bubble{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:#fff7cf;color:var(--navy)}
+    .icon-bubble svg{width:25px;height:25px}
+    .result{margin:10px 0 0;border:2px solid var(--navy2);border-radius:12px;padding:12px 16px;background:#fff;box-shadow:0 8px 20px rgba(19,38,76,.09);display:grid;grid-template-columns:155px 1fr 250px;align-items:center;gap:14px;opacity:0;transform:translateY(5px);pointer-events:none;transition:.2s ease}
+    .result.show{opacity:1;transform:none;pointer-events:auto}
+    .result-label{font-size:14px;font-weight:800;margin-bottom:2px}
+    .price{font-size:35px;line-height:1;font-weight:800}
+    .route-summary{border-left:1px solid var(--line);padding-left:18px;font-weight:600;white-space:nowrap}
+    .request{height:54px;border:0;border-radius:9px;background:linear-gradient(90deg,#ffc800,#ffdb3d);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer}
+    .request:hover{filter:brightness(1.04);transform:translateY(-1px)}
+    .error{position:absolute;top:205px;left:0;width:610px;color:#a21d1d;font-size:13px;font-weight:600}
+    .services{position:absolute;left:0;right:0;top:125px}
+    .services h2{font-size:29px;line-height:1;margin:0 0 22px;letter-spacing:-.7px}
+    .services h2:after{content:"";display:block;width:36px;height:3px;background:#f4bc00;border-radius:3px;margin:9px 0 0 78px}
+    .service-row{display:grid;grid-template-columns:repeat(4,1fr)}
+    .service{display:flex;align-items:center;gap:15px;padding:0 24px;border-right:1px solid var(--line);min-width:0}
+    .service:first-child{padding-left:0}.service:last-child{border-right:0}
+    .service .icon-bubble{color:#df9f00}
+    .service strong{display:block;font-size:15px;margin-bottom:5px}
+    .service small{font-size:13px;color:var(--muted);line-height:1.3}
+    footer{height:52px;background:linear-gradient(90deg,#071b3e,#0e2c61);color:#fff}
+    .footer-inner{width:min(1340px,calc(100% - 48px));height:100%;margin:auto;display:grid;grid-template-columns:1.5fr .7fr 1fr;align-items:center;gap:25px;font-size:12px}
+    .footer-brand{font-size:24px;font-weight:800;color:#fff}.footer-brand span{color:var(--yellow)}
+    .footer-copy{display:flex;align-items:center;gap:18px}.footer-copy:before{content:"";height:30px;width:1px;background:rgba(255,255,255,.55)}
+    .footer-phone{text-align:center;font-size:15px;font-weight:700}.copyright{text-align:right;color:#e8edf7}
+    @media (min-width:1000px) and (min-height:720px){body{height:100svh;overflow:hidden}.page{height:100svh;display:grid;grid-template-rows:61vh 1fr 52px}.hero{height:auto;min-height:0}.content{min-height:0}.content-inner{min-height:0}}
+    @media (max-width:1050px){nav{margin-right:0;gap:30px}.booking-layout{grid-template-columns:52% 48%;gap:14px}.result{grid-template-columns:120px 1fr 190px}.service{padding:0 10px}.hero-copy{width:48%}}
+    @media (max-width:820px){body{overflow:auto}.page{display:block}.hero{height:620px;min-height:0;background-position:62% center}.hero-inner{width:calc(100% - 30px)}.topbar{height:120px}.brand{width:104px;height:104px}nav{margin:35px 0 0;gap:18px;font-size:14px}.hero-copy{width:100%;margin-top:45px}h1{font-size:47px}.tagline{font-size:16px}.content{min-height:830px}.content-inner{width:calc(100% - 30px)}.booking-layout{position:relative;top:-76px;display:block}.planner{padding:18px}.fields{grid-template-columns:1fr}.right-panel{padding-top:22px}.trust{grid-template-columns:1fr}.trust-item{border-right:0;border-bottom:1px solid var(--line);padding:8px 0}.result{grid-template-columns:1fr;margin-top:15px}.route-summary{border-left:0;padding-left:0}.services{position:relative;top:-45px}.service-row{grid-template-columns:1fr 1fr;gap:20px}.service{border:0;padding:0}.footer-inner{grid-template-columns:1fr;text-align:center;padding:20px 0}.footer-copy{justify-content:center}.footer-copy:before{display:none}.copyright{text-align:center}footer{height:auto}.error{position:static;width:auto;margin-top:8px}}
+    @media (max-width:540px){nav{display:none}.hero{height:560px;background-position:66% center}.hero-copy{margin-top:40px}h1{font-size:42px}.booking-layout{top:-56px}.service-row{grid-template-columns:1fr}.content{min-height:980px}.result{padding:15px}.request{width:100%}}
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
-    <h1>Plan Je Rit</h1>
-    <div class="sub">Vul je ritgegevens in en vraag eenvoudig je taxi aan.</div>
-
-    <div class="grid">
-      <div><label for="pickup">Ophaallocatie</label><div class="autocomplete"><input id="pickup" placeholder="Begin een adres te typen" autocomplete="off" aria-autocomplete="list"><div id="pickupSuggestions" class="suggestions" role="listbox"></div></div></div>
-      <div><label for="destination">Bestemming</label><div class="autocomplete"><input id="destination" placeholder="Begin een adres te typen" autocomplete="off" aria-autocomplete="list"><div id="destinationSuggestions" class="suggestions" role="listbox"></div></div></div>
-      <div><div><label>Datum</label><input id="date" type="date"></div></div>
-      <div><div><label>Tijd</label><input id="time" type="time"></div></div>
-      <div><div><label>Aantal personen</label><select id="passengers"><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
-      <div><div><label>Aantal bagage</label><select id="luggage"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div></div>
-    </div>
-
-    <div class="section">
-      <h2>✈️ Airport / vlucht</h2>
-      <div class="choice">
-        <label><input type="radio" name="airport" value="no" checked onchange="toggleAirport(false)"><span>Geen airportrit</span></label>
-        <label><input type="radio" name="airport" value="yes" onchange="toggleAirport(true)"><span>Ja, airportrit</span></label>
+<div class="page">
+  <header class="hero" id="home">
+    <div class="hero-inner">
+      <div class="topbar">
+        <a class="brand" href="#home" aria-label="JouwRit home"><img src="assets/jouwrit-logo.png" alt="JouwRit Taxi Service"></a>
+        <nav aria-label="Hoofdnavigatie">
+          <a class="active" href="#home">Home</a><a href="#services">Diensten</a><a href="#">Over Ons</a><a href="#">Contact</a>
+        </nav>
       </div>
-      <div id="airportFields" class="grid hidden" style="margin-top:18px">
-        <div><label>Airport</label><input id="airport" placeholder="Bijv. Eindhoven Airport"></div>
-        <div><label>Vluchtnummer</label><input id="flight" placeholder="Bijv. KL1234"></div>
-        <div><label>Type</label><select id="flightType"><option>Aankomst</option><option>Vertrek</option></select></div>
-        <div><label>Vluchttijd</label><input id="flightTime" type="time"></div>
+      <div class="hero-copy">
+        <h1><span>Jouw Rit,</span><br>Onze Zorg</h1>
+        <p class="tagline">Comfortabel en betrouwbaar vervoer<br>in Eindhoven en omgeving.</p>
+        <a class="phone" href="tel:+31629098099" aria-label="Bel JouwRit op +31 6 29098099">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.7 3.4 3.3 5 6.7 6.7l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.4.6 3.7.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3.7c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1z"/></svg>
+          +31 6 29098099
+        </a>
       </div>
     </div>
-
-    <div class="section">
-      <h2>💶 Prijskeuze</h2>
-      <div class="choice">
-        <label><input type="radio" name="priceType" value="meter" checked onchange="togglePrice()"><span><b>Taximeter</b><br><small>€4,31 + €3,17/km + €0,52/min</small></span></label>
-        <label><input type="radio" name="priceType" value="fixed" onchange="togglePrice()"><span><b>Vaste prijs</b><br><small>Prijs vooraf berekend</small></span></label>
+  </header>
+  <main class="content">
+    <div class="content-inner">
+      <div class="booking-layout">
+        <section class="planner" aria-labelledby="planner-title">
+          <h2 id="planner-title">Plan je rit</h2>
+          <div class="fields">
+            <div><label for="pickup">Ophaallocatie</label><div class="field-wrap"><svg class="field-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><input id="pickup" autocomplete="off" placeholder="Vul ophaaladres in"><div id="pickup-list" class="suggestions" role="listbox"></div></div></div>
+            <div><label for="destination">Bestemming</label><div class="field-wrap"><svg class="field-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><input id="destination" autocomplete="off" placeholder="Vul bestemming in"><div id="destination-list" class="suggestions" role="listbox"></div></div></div>
+          </div>
+          <button id="calculate" class="calculate">Bereken mijn rit <span aria-hidden="true">→</span></button>
+        </section>
+        <section class="right-panel" aria-label="Ritvoordelen en prijs">
+          <div class="trust">
+            <div class="trust-item"><span class="icon-bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg></span>24/7 beschikbaar</div>
+            <div class="trust-item"><span class="icon-bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></span>Max. 4 personen</div>
+            <div class="trust-item"><span class="icon-bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 8 8-8 8-8-8z"/></svg></span>Vaste prijs of taximeter</div>
+          </div>
+          <div id="result" class="result" aria-live="polite">
+            <div><div class="result-label">Uw ritprijs</div><div id="price" class="price">€ 0,00</div></div>
+            <div id="route-summary" class="route-summary">— km • — min</div>
+            <button id="request" class="request">Rit aanvragen&nbsp; →</button>
+          </div>
+        </section>
       </div>
-      <div id="meterInfo" class="note"><strong>Let op:</strong> Dit is een geschatte taximeterprijs. De uiteindelijke ritprijs wordt bepaald door de taximeter en kan afwijken door verkeersdrukte, omleidingen, wachttijd of andere vertragingen.</div>
-      <div id="fixedInfo" class="note hidden">Een vaste prijs wordt na controle van de route vooraf bepaald.</div>
+      <div id="error" class="error" aria-live="assertive"></div>
+      <section class="services" id="services" aria-labelledby="services-title">
+        <h2 id="services-title">Onze Service</h2>
+        <div class="service-row">
+          <div class="service"><span class="icon-bubble">✈</span><div><strong>Luchthavenvervoer</strong><small>Comfortabel naar elke luchthaven.</small></div></div>
+          <div class="service"><span class="icon-bubble">▥</span><div><strong>Stadsritten</strong><small>Snel en veilig door Eindhoven.</small></div></div>
+          <div class="service"><span class="icon-bubble">▣</span><div><strong>Zakelijk vervoer</strong><small>Betrouwbaar en representatief.</small></div></div>
+          <div class="service"><span class="icon-bubble">◷</span><div><strong>24/7 beschikbaar</strong><small>Altijd voor u klaar.</small></div></div>
+        </div>
+      </section>
     </div>
-    <div class="section">
-  <h2>💳 Betaalmethode</h2>
-  <div class="choice">
-    <label id="onlinePayment" class="hidden">
-      <input type="radio" name="paymentMethod" value="Online betalen na bevestiging">
-      <span><b>Online betalen</b><br><small>iDEAL, Apple Pay of kaart — na bevestiging</small></span>
-    </label>
-
-    <label>
-      <input type="radio" name="paymentMethod" value="Pinnen in de taxi" checked>
-      <span><b>Pinnen in de taxi</b><br><small>Betalen bij de chauffeur</small></span>
-    </label>
-
-    <label>
-      <input type="radio" name="paymentMethod" value="Contant betalen">
-      <span><b>Contant betalen</b><br><small>Betalen bij de chauffeur</small></span>
-    </label>
-  </div>
+  </main>
+  <footer><div class="footer-inner"><div class="footer-copy"><div class="footer-brand">Jouw<span>Rit</span></div><div>Comfortabel en betrouwbaar vervoer in Eindhoven en omgeving.</div></div><div class="footer-phone">☎ &nbsp;+31 6 29098099</div><div class="copyright">© 2026 JouwRit. Alle rechten voorbehouden.</div></div></footer>
 </div>
-
-    <div class="section">
-      <h2>💬 Extra informatie</h2>
-      <textarea id="extra" placeholder="Bijvoorbeeld: kinderen/kinderzitje, veel bagage, rolstoel, speciale wensen of belangrijke informatie..."></textarea>
-    </div>
-
-    <div class="section">
-      <h2>👤 Jouw gegevens</h2>
-      <div class="grid">
-        <div><label>Naam</label><input id="name" placeholder="Voor- en achternaam"></div>
-        <div><label>Telefoonnummer</label><input id="phone" type="tel" placeholder="06 12345678"></div>
-        <div class="full"><label>E-mail</label><input id="email" type="email" placeholder="naam@email.nl"></div>
-      </div>
-    </div>
-
-    <div class="price">
-      <div><div class="muted">Geschatte ritprijs</div><strong id="price">Wordt berekend</strong></div>
-      <div id="routeSummary" class="muted"></div>
-    </div>
-
-    <button type="button" onclick="calculateRoute()">🧭 Bereken mijn rit</button>
-    <button type="button" onclick="submitBooking()">🚕 Rit aanvragen</button>
-    <div id="result" class="note"></div>
-  </div>
-</div>
-
 <script>
-function toggleAirport(show){document.getElementById('airportFields').classList.toggle('hidden',!show)}
-function toggleChildren(show){document.getElementById('childrenFields').classList.toggle('hidden',!show)}
-function togglePrice(){document.getElementById('fixedInfo').classList.toggle('hidden',document.querySelector('input[name=priceType]:checked').value!=='fixed')}
-  function togglePaymentOptions(){
-  const isFixed=document.querySelector('input[name="priceType"]:checked').value==='fixed';
-  const online=document.getElementById('onlinePayment');
-  online.classList.toggle('hidden',!isFixed);
-    document.getElementById('meterInfo').classList.toggle('hidden',isFixed);
-
-  if(!isFixed && online.querySelector('input').checked){
-    document.querySelector('input[name="paymentMethod"][value="Pinnen in de taxi"]').checked=true;
-  }
-}
-
-document.querySelectorAll('input[name="priceType"]').forEach(input=>{
-  input.addEventListener('change',togglePaymentOptions);
-});
-
-function attachAutocomplete(inputId){
-  const input=document.getElementById(inputId);
-  const list=document.getElementById(inputId+'Suggestions');
-  let timer,controller;
-
-  function close(){list.innerHTML='';}
-  input.addEventListener('input',()=>{
-    delete input.dataset.lat; delete input.dataset.lon;
-    window.jouwritRoute=null;
-    document.getElementById('price').textContent='Wordt berekend';
-    clearTimeout(timer); if(controller) controller.abort(); close();
-    const query=input.value.trim();
-    if(query.length<3) return;
-    timer=setTimeout(async()=>{
-      controller=new AbortController();
-      try{
-        const url='https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&countrycodes=nl&q='+encodeURIComponent(query);
-        const response=await fetch(url,{signal:controller.signal});
-        if(!response.ok) return;
-        const data=await response.json();
-        close();
-        for(const result of data||[]){
-          const p=result.address||{};
-          const titleText=[p.road||p.pedestrian||p.square||result.name,p.house_number].filter(Boolean).join(' ') || result.display_name.split(',')[0];
-          const button=document.createElement('button');
-          button.type='button'; button.className='suggestion'; button.setAttribute('role','option');
-          const title=document.createElement('strong'); title.textContent=titleText;
-          const detail=document.createElement('small'); detail.textContent=result.display_name;
-          button.append(title,detail);
-          button.addEventListener('click',()=>{
-            input.value=result.display_name;
-            input.dataset.lon=result.lon;
-            input.dataset.lat=result.lat;
-            close(); input.focus();
-          });
-          list.appendChild(button);
-        }
-      }catch(error){if(error.name!=='AbortError') close();}
-    },900);
-  });
-  input.addEventListener('keydown',event=>{if(event.key==='Escape') close();});
-  document.addEventListener('click',event=>{if(!input.parentElement.contains(event.target)) close();});
-}
-
-attachAutocomplete('pickup');
-attachAutocomplete('destination');
-
-async function geocode(address,inputId){
-  const input=document.getElementById(inputId);
-  if(input.dataset.lat && input.dataset.lon){
-    return {lat:Number(input.dataset.lat),lon:Number(input.dataset.lon),name:input.value};
-  }
-  const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=nl&q='+encodeURIComponent(address);
-  const r=await fetch(url,{headers:{'Accept':'application/json'}});
-  if(!r.ok) throw new Error('Geocoding mislukt');
-  const data=await r.json();
-  if(!data.length) throw new Error('Adres niet gevonden: '+address);
-  return {lat:Number(data[0].lat),lon:Number(data[0].lon),name:data[0].display_name};
-}
-
-async function calculateRoute(){
-  const pickup=document.getElementById('pickup').value.trim();
-  const destination=document.getElementById('destination').value.trim();
-  const result=document.getElementById('result');
-  if(!pickup || !destination){
-    result.textContent='Vul eerst de ophaallocatie en bestemming in.';
-    return;
-  }
-  result.textContent='Route wordt berekend…';
-  try{
-    const a=await geocode(pickup,'pickup'), b=await geocode(destination,'destination');
-    const url=`https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false`;
-    const r=await fetch(url);
-    if(!r.ok) throw new Error('Routeberekening mislukt');
-    const data=await r.json();
-    if(data.code!=='Ok' || !data.routes?.length) throw new Error('Geen rijroute gevonden.');
-    const route=data.routes[0];
-    const km=route.distance/1000;
-    const min=route.duration/60;
-    const price=4.31+(3.17*km)+(0.52*min);
-    document.getElementById('price').textContent='€ '+price.toFixed(2).replace('.',',');
-    document.getElementById('routeSummary').textContent=`${km.toFixed(1)} km · ${Math.round(min)} min`;
-    result.textContent='Route en geschatte taximeterprijs berekend.';
-    window.jouwritRoute={km,min,price,pickup:a.name,destination:b.name};
-  }catch(e){
-    result.textContent=e.message+' Probeer het adres opnieuw.';
-  }
-}
-
-function submitBooking(){
-  const required=[
-    ['pickup','Ophaallocatie'],
-    ['destination','Bestemming'],
-    ['date','Datum'],
-    ['time','Tijd'],
-    ['name','Naam'],
-    ['phone','Telefoonnummer']
-  ];
-
-  for(const [id,label] of required){
-    if(!document.getElementById(id).value.trim()){
-      document.getElementById('result').textContent='Vul eerst '+label+' in.';
-      document.getElementById(id).focus();
-      return;
-    }
-  }
-
-  if(!window.jouwritRoute){
-    document.getElementById('result').textContent='Bereken eerst de route en prijs.';
-    return;
-  }
-
-  const value=id=>document.getElementById(id)?.value?.trim()||'-';
-  const rit=window.jouwritRoute;
- const prijskeuze=document.querySelector('input[name="priceType"]:checked').value==='fixed' ? 'Vaste prijs' : 'Taximeter';
-  const betaalmethode=document.querySelector('input[name="paymentMethod"]:checked').value;
-
-const bericht=`NIEUWE JOUWRIT AANVRAAG
-
-KLANTGEGEVENS
-Naam: ${value('name')}
-Telefoon: ${value('phone')}
-E-mail: ${value('email')}
-Betaalmethode: ${betaalmethode}
-
-RITGEGEVENS
-Ophalen: ${rit.pickup}
-Bestemming: ${rit.destination}
-Datum: ${value('date')}
-Tijd: ${value('time')}
-Personen: ${value('passengers')}
-Bagage: ${value('luggage')}
-
-VLUCHTGEGEVENS
-Airportrit: ${document.querySelector('input[name="airport"]:checked')?.value==="yes"?'Ja':'Nee'}
-Airport: ${value('airport')}
-Vluchtnummer: ${value('flight')}
-Vluchttype: ${value('flightType')}
-Vluchttijd: ${value('flightTime')}
-Extra informatie: ${value('extra')}
-
-PRIJS EN AFSTAND
-Afstand: ${rit.km.toFixed(1)} km
-Geschatte reistijd: ${Math.round(rit.min)} minuten
-Geschatte ritprijs: €${rit.price.toFixed(2).replace('.',',')}
-Prijskeuze: ${prijskeuze}`;
-
-  document.getElementById('result').textContent='WhatsApp wordt geopend...';
-  window.open('https://wa.me/31629098099?text='+encodeURIComponent(bericht),'_blank');
-}
+  const inputs={pickup:document.querySelector('#pickup'),destination:document.querySelector('#destination')};
+  const points={pickup:null,destination:null};
+  const state={km:0,minutes:0,price:0};
+  const euro=new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'});
+  function debounce(fn,delay=300){let timer;return(...args)=>{clearTimeout(timer);timer=setTimeout(()=>fn(...args),delay)}}
+  function nameOf(feature){const p=feature.properties||{};return [p.name,p.street,p.housenumber,p.city,p.postcode,p.country].filter((v,i,a)=>v&&a.indexOf(v)===i).join(', ')}
+  async function searchAddress(kind){const input=inputs[kind],list=document.querySelector(`#${kind}-list`),q=input.value.trim();points[kind]=null;if(q.length<3){list.classList.remove('open');return}try{const res=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5`);if(!res.ok)throw new Error('Adres zoeken is tijdelijk niet beschikbaar.');const data=await res.json();list.innerHTML='';(data.features||[]).forEach(feature=>{const button=document.createElement('div');button.className='suggestion';button.tabIndex=0;button.setAttribute('role','option');button.textContent=nameOf(feature);const choose=()=>{input.value=button.textContent;points[kind]=feature.geometry.coordinates;list.classList.remove('open')};button.onclick=choose;button.onkeydown=e=>{if(e.key==='Enter')choose()};list.appendChild(button)});list.classList.toggle('open',list.children.length>0)}catch{list.classList.remove('open')}}
+  async function resolvePoint(kind){if(points[kind])return points[kind];const q=inputs[kind].value.trim();if(!q)throw new Error('Vul zowel de ophaallocatie als de bestemming in.');const res=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1`);if(!res.ok)throw new Error('Adres zoeken is tijdelijk niet beschikbaar.');const data=await res.json();if(!data.features?.length)throw new Error(`Adres niet gevonden: ${q}`);const feature=data.features[0];points[kind]=feature.geometry.coordinates;inputs[kind].value=nameOf(feature);return points[kind]}
+  Object.keys(inputs).forEach(kind=>inputs[kind].addEventListener('input',debounce(()=>searchAddress(kind))));
+  document.addEventListener('click',e=>{if(!e.target.closest('.field-wrap'))document.querySelectorAll('.suggestions').forEach(x=>x.classList.remove('open'))});
+  document.querySelector('#calculate').addEventListener('click',async()=>{const btn=document.querySelector('#calculate'),error=document.querySelector('#error');error.textContent='';btn.disabled=true;btn.firstChild.textContent='Route berekenen… ';try{const [a,b]=await Promise.all([resolvePoint('pickup'),resolvePoint('destination')]);const url=`https://router.project-osrm.org/route/v1/driving/${a[0]},${a[1]};${b[0]},${b[1]}?overview=false`;
+      const res=await fetch(url);const data=await res.json();if(data.code!=='Ok'||!data.routes?.length)throw new Error('Deze route kon niet worden berekend.');const route=data.routes[0];state.km=route.distance/1000;state.minutes=Math.max(1,Math.round(route.duration/60));state.price=4.02+(state.km*2.96)+(state.minutes*.49);document.querySelector('#price').textContent=euro.format(state.price);document.querySelector('#route-summary').textContent=`${state.km.toLocaleString('nl-NL',{maximumFractionDigits:1})} km • ${state.minutes} min`;document.querySelector('#result').classList.add('show')
+    }catch(err){error.textContent=err.message||'Er ging iets mis. Probeer het opnieuw.'}finally{btn.disabled=false;btn.firstChild.textContent='Bereken mijn rit '}});
+  document.querySelector('#request').addEventListener('click',()=>{const p=new URLSearchParams({pickup:inputs.pickup.value,destination:inputs.destination.value,km:state.km.toFixed(1),minutes:String(state.minutes),price:state.price.toFixed(2)});location.href=`booking.html?${p}`});
 </script>
 </body>
 </html>
