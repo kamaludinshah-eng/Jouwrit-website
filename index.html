@@ -140,21 +140,31 @@
   </main>
   <footer><div class="footer-inner"><div class="footer-copy"><div class="footer-brand">Jouw<span>Rit</span></div><div>Comfortabel en betrouwbaar vervoer in Eindhoven en omgeving.</div></div><div class="footer-phone">☎ &nbsp;+31 6 29098099</div><div class="copyright">© 2026 JouwRit. Alle rechten voorbehouden.</div></div></footer>
 </div>
+<script src="route-client.js"></script>
 <script>
-  const inputs={pickup:document.querySelector('#pickup'),destination:document.querySelector('#destination')};
-  const points={pickup:null,destination:null};
-  const state={km:0,minutes:0,price:0};
-  const euro=new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'});
-  function debounce(fn,delay=300){let timer;return(...args)=>{clearTimeout(timer);timer=setTimeout(()=>fn(...args),delay)}}
-  function nameOf(feature){const p=feature.properties||{};return [p.name,p.street,p.housenumber,p.city,p.postcode,p.country].filter((v,i,a)=>v&&a.indexOf(v)===i).join(', ')}
-  async function searchAddress(kind){const input=inputs[kind],list=document.querySelector(`#${kind}-list`),q=input.value.trim();points[kind]=null;if(q.length<3){list.classList.remove('open');return}try{const res=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5`);if(!res.ok)throw new Error('Adres zoeken is tijdelijk niet beschikbaar.');const data=await res.json();list.innerHTML='';(data.features||[]).forEach(feature=>{const button=document.createElement('div');button.className='suggestion';button.tabIndex=0;button.setAttribute('role','option');button.textContent=nameOf(feature);const choose=()=>{input.value=button.textContent;points[kind]=feature.geometry.coordinates;list.classList.remove('open')};button.onclick=choose;button.onkeydown=e=>{if(e.key==='Enter')choose()};list.appendChild(button)});list.classList.toggle('open',list.children.length>0)}catch{list.classList.remove('open')}}
-  async function resolvePoint(kind){if(points[kind])return points[kind];const q=inputs[kind].value.trim();if(!q)throw new Error('Vul zowel de ophaallocatie als de bestemming in.');const res=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1`);if(!res.ok)throw new Error('Adres zoeken is tijdelijk niet beschikbaar.');const data=await res.json();if(!data.features?.length)throw new Error(`Adres niet gevonden: ${q}`);const feature=data.features[0];points[kind]=feature.geometry.coordinates;inputs[kind].value=nameOf(feature);return points[kind]}
-  Object.keys(inputs).forEach(kind=>inputs[kind].addEventListener('input',debounce(()=>searchAddress(kind))));
-  document.addEventListener('click',e=>{if(!e.target.closest('.field-wrap'))document.querySelectorAll('.suggestions').forEach(x=>x.classList.remove('open'))});
-  document.querySelector('#calculate').addEventListener('click',async()=>{const btn=document.querySelector('#calculate'),error=document.querySelector('#error');error.textContent='';btn.disabled=true;btn.firstChild.textContent='Route berekenen… ';try{const [a,b]=await Promise.all([resolvePoint('pickup'),resolvePoint('destination')]);const url=`https://router.project-osrm.org/route/v1/driving/${a[0]},${a[1]};${b[0]},${b[1]}?overview=false`;
-      const res=await fetch(url);const data=await res.json();if(data.code!=='Ok'||!data.routes?.length)throw new Error('Deze route kon niet worden berekend.');const route=data.routes[0];state.km=route.distance/1000;state.minutes=Math.max(1,Math.round(route.duration/60));state.price=4.02+(state.km*2.96)+(state.minutes*.49);document.querySelector('#price').textContent=euro.format(state.price);document.querySelector('#route-summary').textContent=`${state.km.toLocaleString('nl-NL',{maximumFractionDigits:1})} km • ${state.minutes} min`;document.querySelector('#result').classList.add('show')
-    }catch(err){error.textContent=err.message||'Er ging iets mis. Probeer het opnieuw.'}finally{btn.disabled=false;btn.firstChild.textContent='Bereken mijn rit '}});
-  document.querySelector('#request').addEventListener('click',()=>{const p=new URLSearchParams({pickup:inputs.pickup.value,destination:inputs.destination.value,km:state.km.toFixed(1),minutes:String(state.minutes),price:state.price.toFixed(2)});location.href=`booking.html?${p}`});
+let homeVersion=0,currentRoute=null;
+function resetHome(){homeVersion++;currentRoute=null;document.getElementById('result').classList.remove('show');document.getElementById('error').textContent='';}
+JouwRit.attach('pickup','pickup-list',resetHome);
+JouwRit.attach('destination','destination-list',resetHome);
+document.getElementById('calculate').addEventListener('click',async()=>{
+ resetHome();
+ const version=homeVersion,button=document.getElementById('calculate');
+ button.disabled=true;button.firstChild.textContent='Route berekenen… ';
+ try{
+  const route=await JouwRit.calculate('pickup','destination');
+  if(version!==homeVersion)return;
+  currentRoute=route;
+  document.getElementById('price').textContent=JouwRit.money(route.price);
+  document.getElementById('route-summary').textContent=JouwRit.summary(route);
+  document.getElementById('result').classList.add('show');
+ }catch(e){if(version===homeVersion)document.getElementById('error').textContent=e.message;}
+ finally{button.disabled=false;button.firstChild.textContent='Bereken mijn rit ';}
+});
+document.getElementById('request').addEventListener('click',()=>{
+ if(!currentRoute)return;
+ const params=new URLSearchParams({pickup:currentRoute.pickup,destination:currentRoute.destination,priceType:'fixed',pickupLat:currentRoute.a.lat,pickupLon:currentRoute.a.lon,destinationLat:currentRoute.b.lat,destinationLon:currentRoute.b.lon});
+ location.href='booking.html?'+params.toString();
+});
 </script>
 </body>
 </html>
