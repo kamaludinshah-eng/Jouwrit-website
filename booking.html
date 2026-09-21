@@ -122,8 +122,9 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
     </div>
 
     <button id="calculateBooking" type="button" onclick="calculateRoute()">🧭 Bereken mijn rit</button>
-    <button type="button" onclick="submitBooking()">🚕 Rit aanvragen</button>
-    <div id="result" class="note"></div>
+    <button id="sendBooking" type="button" onclick="submitBooking()">🚕 Rit aanvragen</button>
+    <div class="note">Je aanvraag wordt via FormSubmit per e-mail naar JouwRit verstuurd. Je rit is pas definitief nadat je onze bevestiging hebt ontvangen.</div>
+    <div id="result" class="note" role="status" aria-live="polite"></div>
   </div>
 </div>
 
@@ -177,7 +178,8 @@ function submitBooking(){
     ['date','Datum'],
     ['time','Tijd'],
     ['name','Naam'],
-    ['phone','Telefoonnummer']
+    ['phone','Telefoonnummer'],
+    ['email','E-mail']
   ];
 
   for(const [id,label] of required){
@@ -186,6 +188,11 @@ function submitBooking(){
       document.getElementById(id).focus();
       return;
     }
+  }
+
+  if(!document.getElementById('email').checkValidity()){
+    document.getElementById('email').reportValidity();
+    return;
   }
 
   if(!window.jouwritRoute){
@@ -228,8 +235,38 @@ Geschatte reistijd: ${Math.round(rit.min)} minuten
 Geschatte ritprijs: €${rit.price.toFixed(2).replace('.',',')}
 Prijskeuze: ${prijskeuze}`;
 
-  document.getElementById('result').textContent='WhatsApp wordt geopend...';
-  window.open('https://wa.me/31629098099?text='+encodeURIComponent(bericht),'_blank');
+  const confirmation='Bedankt voor uw aanvraag. Wij controleren de beschikbaarheid en bevestigen uw rit zo snel mogelijk. Uw rit is pas definitief nadat u onze bevestiging heeft ontvangen.';
+  const form=document.createElement('form');
+  form.method='POST';
+  form.action='https://formsubmit.co/kaamilcabdi@hotmail.com';
+  const next=new URL('booking.html',location.href);
+  next.searchParams.set('sent','1');
+  const fields={
+    _subject:'Nieuwe JouwRit aanvraag – '+value('date')+' '+value('time'),
+    _template:'table',
+    _next:next.href,
+    _autoresponse:confirmation,
+    name:value('name'),
+    email:value('email'),
+    Telefoon:value('phone'),
+    Ritgegevens:bericht
+  };
+  for(const [name,value] of Object.entries(fields)){
+    const input=document.createElement('input');
+    input.type='hidden';input.name=name;input.value=value;form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  document.getElementById('result').textContent='Je wordt doorgestuurd om je aanvraag veilig te verzenden…';
+  form.submit();
+
+}
+if(bookingParams.get('sent')==='1'){
+  const notice=document.createElement('div');
+  notice.className='card';notice.setAttribute('role','status');notice.style.marginBottom='20px';
+  const heading=document.createElement('h1');heading.textContent='Bedankt voor uw aanvraag';
+  const message=document.createElement('p');message.textContent='Wij controleren de beschikbaarheid en bevestigen uw rit zo snel mogelijk. Uw rit is pas definitief nadat u onze bevestiging heeft ontvangen.';
+  notice.append(heading,message);document.querySelector('.wrap').prepend(notice);
+  history.replaceState(null,'',location.pathname);
 }
 </script>
 </body>
