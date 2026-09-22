@@ -116,6 +116,19 @@ footer{background:#141719;border-top:1px solid #393c3f}
   .booking-layout{margin-top:-56px}.hero{background-position:66% center}.brand{flex-shrink:0}.service-row{padding-bottom:12px}
 }
 
+/* Desktop fit fix — keep mobile menu unchanged */
+@media (min-width:821px){
+  .brand img{transform:scale(1.72);transform-origin:center 31%;}
+}
+@media (min-width:1000px) and (min-height:720px){
+  body{height:100svh;overflow:hidden}
+  .page{height:100svh;min-height:0;display:grid;grid-template-rows:61vh 1fr 0}
+  .content{min-height:0;overflow:visible}
+  .content-inner{min-height:0}
+  .services{padding:8px 0 10px}
+  footer{display:none}
+}
+
 </style>
 </head>
 <body>
