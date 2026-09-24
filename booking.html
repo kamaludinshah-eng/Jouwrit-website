@@ -58,7 +58,8 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
       <div><div><label>Datum</label><input id="date" type="date"></div></div>
       <div><div><label>Tijd</label><input id="time" type="time"></div></div>
       <div><div><label>Aantal personen</label><select id="passengers"><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
-      <div><div><label>Aantal bagage</label><select id="luggage"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div></div>
+      <div><div><label>Handbagage</label><select id="handLuggage"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
+      <div><div><label>Grote bagage</label><select id="largeLuggage"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>
     </div>
 
     <div class="section">
@@ -68,7 +69,8 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
         <label><input type="radio" name="airport" value="yes" onchange="toggleAirport(true)"><span>Ja, airportrit</span></label>
       </div>
       <div id="airportFields" class="grid hidden" style="margin-top:18px">
-        <div><label>Airport</label><input id="airport" placeholder="Bijv. Eindhoven Airport"></div>
+        <div><label>Luchthaven</label><select id="airport" onchange="toggleOtherAirport()"><option value="">Kies een luchthaven</option><option>Eindhoven Airport</option><option>Amsterdam Airport Schiphol</option><option>Weeze Airport</option><option>Düsseldorf Airport</option><option>Rotterdam The Hague Airport</option><option>Brussels Airport</option><option value="other">Andere luchthaven</option></select></div>
+        <div id="otherAirportWrap" class="hidden"><label>Andere luchthaven</label><input id="otherAirport" placeholder="Vul luchthaven in"></div>
         <div><label>Vluchtnummer</label><input id="flight" placeholder="Bijv. KL1234"></div>
         <div><label>Type</label><select id="flightType"><option>Aankomst</option><option>Vertrek</option></select></div>
         <div><label>Vluchttijd</label><input id="flightTime" type="time"></div>
@@ -132,7 +134,8 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
 
 <script src="route-client.js"></script>
 <script>
-function toggleAirport(show){document.getElementById('airportFields').classList.toggle('hidden',!show)}
+function toggleAirport(show){document.getElementById('airportFields').classList.toggle('hidden',!show);if(!show){document.getElementById('airport').value='';document.getElementById('otherAirport').value='';toggleOtherAirport();}}
+function toggleOtherAirport(){document.getElementById('otherAirportWrap').classList.toggle('hidden',document.getElementById('airport').value!=='other')}
 function togglePrice(){
  const fixed=document.querySelector('input[name=priceType]:checked').value==='fixed';
  document.getElementById('fixedInfo').classList.toggle('hidden',!fixed);
@@ -221,11 +224,12 @@ Bestemming: ${rit.destination}
 Datum: ${value('date')}
 Tijd: ${value('time')}
 Personen: ${value('passengers')}
-Bagage: ${value('luggage')}
+Handbagage: ${value('handLuggage')}
+Grote bagage: ${value('largeLuggage')}
 
 VLUCHTGEGEVENS
 Airportrit: ${document.querySelector('input[name="airport"]:checked')?.value==="yes"?'Ja':'Nee'}
-Airport: ${value('airport')}
+Airport: ${document.getElementById('airport').value==='other'?value('otherAirport'):value('airport')}
 Vluchtnummer: ${value('flight')}
 Vluchttype: ${value('flightType')}
 Vluchttijd: ${value('flightTime')}
