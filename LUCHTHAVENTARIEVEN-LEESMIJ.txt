@@ -1,0 +1,30 @@
+JouwRit — vaste luchthavenprijzen
+
+Enkele reis NAAR de luchthaven, alleen vanuit:
+Eindhoven, Veldhoven, Best, Waalre, Geldrop en Nuenen.
+
+Amsterdam Airport Schiphol: EUR 250
+Brussels Airport (Zaventem): EUR 250
+Weeze Airport: EUR 200
+Düsseldorf Airport: EUR 250
+Rotterdam The Hague Airport: EUR 250
+
+Eindhoven Airport, ritten vanaf de luchthaven en andere ophaalplaatsen
+krijgen geen van deze speciale prijzen. De normale berekening blijft gelden.
+Een volledig ophaaladres met huisnummer is nodig voor de controle.
+Als die controle niet beschikbaar is, wordt geen vaste prijs bevestigd.
+
+PRIJZEN LATER AANPASSEN
+Open airport-offers.js. Alle prijzen staan bovenaan in config.airports.
+Wijzig bijvoorbeeld price:200 naar price:210 voor Weeze Airport.
+Gebruik een punt voor decimalen en zet geen euroteken in het getal.
+De keuzelijst en de vanafprijs op de homepage gebruiken dezelfde gegevens.
+
+ACTIE STOPPEN
+Wijzig bovenaan in airport-offers.js enabled:true naar enabled:false.
+De speciale prijzen en de homepagevermelding verdwijnen dan.
+De gewone routeberekening blijft beschikbaar.
+
+Upload bij installatie de hele website uit deze ZIP, inclusief airport-offers.js.
+De eerdere goedgekeurde ZIP is ongewijzigd bewaard.
+Ritaanvragen blijven pas definitief na bevestiging door JouwRit.

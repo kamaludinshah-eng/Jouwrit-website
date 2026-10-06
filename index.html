@@ -161,14 +161,20 @@ footer{background:#141719;border-top:1px solid #393c3f}
   .reviews h2{font-size:24px}
 }
 
+/* Reveal more of the Tesla without changing its scale or the layout. */
+@media(min-width:821px){.hero{background-position:center,center min(0px,max(calc((max(480px,61vh) - 100vw * 941 / 1672) * .7),calc(20px - 100vw * 278 / 1672)))}}
+.airport-offer-home{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 0 30px;padding:20px 22px;border:1px solid var(--yellow);border-radius:12px;background:#292d30;color:#fff}
+.airport-offer-home[hidden]{display:none}.airport-offer-home h2{font-size:23px;line-height:1.25;margin:0 0 8px;letter-spacing:0}.airport-offer-home h2 span{color:var(--yellow)}.airport-offer-home p{font-size:14px;line-height:1.5;margin:0}.airport-offer-home small{display:block;color:#d8dcde;line-height:1.5;margin-top:7px}.airport-offer-home a{display:inline-block;flex-shrink:0;padding:13px 18px;background:var(--yellow);color:#202326;text-decoration:none;font-weight:800;border-radius:7px}
+@media(max-width:700px){.airport-offer-home{display:block}.airport-offer-home a{margin-top:16px}.airport-offer-home h2{font-size:21px}}
 </style>
+<link rel="stylesheet" href="brand-privacy.css">
 </head>
 <body>
 <div class="page">
   <header class="hero" id="home">
     <div class="hero-inner">
       <div class="topbar">
-        <a class="brand" href="#home" aria-label="JouwRit home"><img src="assets/jouwrit-road-pin.png" alt="JouwRit Taxi Service"></a>
+        <a class="brand" href="#home" aria-label="JouwRit home"><img src="assets/jouwrit-brand.svg" alt="JouwRit Taxi Service"></a>
         <button class="menu-toggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
         <nav id="main-nav" aria-label="Hoofdnavigatie">
           <a class="active" href="index.html">Home</a><a href="diensten.html">Diensten</a><a href="over-ons.html">Over Ons</a><a href="contact.html">Contact</a>
@@ -217,6 +223,10 @@ footer{background:#141719;border-top:1px solid #393c3f}
           <div class="service"><span class="icon-bubble">◷</span><div><strong>24/7 beschikbaar</strong><small>Altijd voor u klaar.</small></div></div>
         </div>
       </section>
+      <section class="airport-offer-home" id="airport-offer-home" aria-labelledby="airport-offer-title">
+        <div><h2 id="airport-offer-title">Vaste luchthavenprijzen vanaf <span id="airport-offer-minimum">€200</span></h2><p>Enkele reis vanuit Eindhoven en omgeving. Kies uw luchthaven bij het boeken.</p><small>Alleen vanuit <span id="airport-offer-area">Eindhoven, Veldhoven, Best, Waalre, Geldrop, Nuenen</span>. Naar Schiphol, Brussels Airport, Weeze, Düsseldorf en Rotterdam The Hague Airport. Geen retourrit.</small></div>
+        <a href="booking.html?airportOffer=1#airportFields">Kies uw luchthaven →</a>
+      </section>
       <section class="reviews" id="reviews" aria-labelledby="reviews-title">
         <div class="reviews-head">
           <div><h2 id="reviews-title">Wat onze klanten zeggen</h2><p class="reviews-sub">Google Reviews van JouwRit.</p></div>
@@ -231,9 +241,10 @@ footer{background:#141719;border-top:1px solid #393c3f}
       </section>
     </div>
   </main>
-  <footer><div class="footer-inner"><div class="footer-copy"><div class="footer-brand">Jouw<span>Rit</span></div><div>Comfortabel en betrouwbaar vervoer in Eindhoven en omgeving.</div></div><div class="footer-phone" aria-hidden="true"></div><div class="copyright">© 2026 JouwRit. Alle rechten voorbehouden.</div></div></footer>
+  <footer><div class="footer-inner"><div class="footer-copy"><div class="footer-brand">Jouw<span>Rit</span></div><div>Comfortabel en betrouwbaar vervoer in Eindhoven en omgeving.</div></div><div class="footer-phone"><a class="privacy-link" href="privacyverklaring.html">Privacyverklaring</a></div><div class="copyright">© 2026 JouwRit. Alle rechten voorbehouden.</div></div></footer>
 </div>
 <script src="route-client.js"></script>
+<script src="airport-offers.js"></script>
 <script>
 const menuToggle=document.querySelector('.menu-toggle');
 const mainNav=document.getElementById('main-nav');
