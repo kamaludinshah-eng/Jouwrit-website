@@ -184,6 +184,7 @@ function togglePrice(){
  document.getElementById('fixedInfo').classList.toggle('hidden',!fixed);
  document.getElementById('meterInfo').classList.toggle('hidden',fixed);
  document.getElementById('onlinePayment').classList.toggle('hidden',!fixed);
+ if(!fixed){const online=document.querySelector('#onlinePayment input');if(online.checked)document.querySelector('input[value="Pinnen in de taxi"]').checked=true;}
 }
 document.querySelectorAll('input[name="priceType"]').forEach(input=>input.addEventListener('change',()=>{
  document.getElementById('meterInfo').classList.toggle('hidden',document.querySelector('input[name="priceType"]:checked').value==='fixed');
