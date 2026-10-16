@@ -42,6 +42,12 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
 
 .booking-logo{object-fit:contain;border-radius:8px;box-shadow:none;background:#202326}
 .airport-offer{margin-top:18px;padding:14px 16px;background:#fff6cc;border:1px solid #e9cf66;border-radius:10px;line-height:1.5;font-size:14px}
+
+.grid>*{min-width:0}input,select,textarea{min-width:0;max-width:100%}
+input[type="date"],input[type="time"]{display:block;appearance:none;-webkit-appearance:none;min-height:46px;width:100%;min-width:0}
+input::-webkit-date-and-time-value{text-align:left;min-width:0}
+[hidden]{display:none!important}#bookingSuccess{padding:20px 0;line-height:1.6}#bookingSuccess h2{font-size:24px;color:#172033}
+.success-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.success-actions a{padding:12px 18px;border-radius:10px;background:#f4c400;color:#172033;font-weight:bold;text-decoration:none}
 </style>
 <link rel="stylesheet" href="brand-privacy.css">
 </head>
@@ -54,6 +60,7 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
       <div><h1>Plan Je Rit</h1><p class="sub">Vul je ritgegevens in en vraag eenvoudig je taxi aan.</p></div>
     </header>
 
+    <div id="bookingFields">
     <div class="grid">
       <div><label for="pickup">Ophaallocatie</label><div class="autocomplete"><input id="pickup" placeholder="Begin een adres te typen" autocomplete="off" aria-autocomplete="list"><div id="pickupSuggestions" class="suggestions" role="listbox"></div></div></div>
       <div><label for="destination">Bestemming</label><div class="autocomplete"><input id="destination" placeholder="Begin een adres te typen" autocomplete="off" aria-autocomplete="list"><div id="destinationSuggestions" class="suggestions" role="listbox"></div></div></div>
@@ -129,12 +136,19 @@ button{width:100%;margin-top:20px;padding:16px;border:0;border-radius:11px;backg
       <div id="routeSummary" class="muted"></div>
     </div>
 
-    <button id="calculateBooking" type="button" onclick="calculateRoute()">🧭 Bereken mijn rit</button>
+    <button id="calculateBooking" type="button" onclick="calculateRoute()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="vertical-align:middle"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h1m6 0h1M8 14h1m6 0h1M8 18h1m6 0h1"/></svg> Bereken mijn rit</button>
     <button id="sendBooking" type="button" onclick="submitBooking()">🚕 Rit aanvragen</button>
     <div id="bookingSpamCheck" style="margin-top:12px"></div>
     <div class="note">Je ontvangt per e-mail een ontvangstbevestiging van JouwRit. Je rit is pas definitief nadat je onze bevestiging hebt ontvangen.</div>
     <p class="note">Lees hoe wij uw gegevens verwerken in onze <a href="privacyverklaring.html">Privacyverklaring</a>.</p>
     <div id="result" class="note" role="status" aria-live="polite"></div>
+    </div>
+    <section id="bookingSuccess" hidden tabindex="-1" aria-labelledby="successTitle">
+      <h2 id="successTitle">✓ Uw ritaanvraag is ontvangen!</h2>
+      <p>U ontvangt een e-mail. Uw rit is pas definitief na onze bevestiging.</p>
+      <p>Referentie: <strong id="successReference"></strong></p>
+      <div class="success-actions"><a href="index.html">Terug naar home</a><a href="booking.html">Nieuwe rit aanvragen</a></div>
+    </section>
   </div>
 </div>
 
@@ -237,7 +251,7 @@ for(const id of ['pickup','destination']){
 }
 if(bookingParams.get('priceType')==='fixed')document.querySelector('input[name="priceType"][value="fixed"]').checked=true;
 for(const option of document.getElementById('airport').options){const offer=JouwRitAirportOffers.get(option.value);if(offer){const name=option.value;option.value=name;option.textContent=name+' — '+JouwRit.money(offer.price)+'*';}}
-document.getElementById('airportOfferTerms').textContent=JouwRitAirportOffers.config.enabled?'* Alleen een enkele reis naar de luchthaven vanuit '+JouwRitAirportOffers.area()+'. Ophaaladres wordt gecontroleerd. Niet voor ophalen vanaf de luchthaven, retourritten of Eindhoven Airport.':'';
+document.getElementById('airportOfferTerms').textContent=JouwRitAirportOffers.config.enabled?'* Alleen een enkele reis naar de luchthaven vanuit '+JouwRitAirportOffers.area()+'. Ophaaladres wordt gecontroleerd. Deze speciale vaste tarieven gelden niet voor ophalen vanaf de luchthaven, retourritten of Eindhoven Airport. Ritten van en naar Eindhoven Airport blijven gewoon beschikbaar via de normale prijsberekening.':'';
 if(bookingParams.get('airportOffer')==='1'){document.querySelector('input[name="airport"][value="yes"]').checked=true;document.getElementById('airportFields').classList.remove('hidden');}
 togglePrice();
 document.getElementById('meterInfo').classList.toggle('hidden',bookingParams.get('priceType')==='fixed');
@@ -293,14 +307,6 @@ function submitBooking(){
     extra:value('extra').replace(/[\r\n\t]+/g,' ')
   });
 
-}
-if(bookingParams.get('sent')==='1'){
-  const notice=document.createElement('div');
-  notice.className='card';notice.setAttribute('role','status');notice.style.marginBottom='20px';
-  const heading=document.createElement('h1');heading.textContent='Bedankt voor uw aanvraag';
-  const message=document.createElement('p');message.textContent='Wij controleren de beschikbaarheid en bevestigen uw rit zo snel mogelijk. Uw rit is pas definitief nadat u onze bevestiging heeft ontvangen.';
-  notice.append(heading,message);document.querySelector('.wrap').prepend(notice);
-  history.replaceState(null,'',location.pathname);
 }
 </script>
 </body>

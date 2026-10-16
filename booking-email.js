@@ -1,5 +1,5 @@
 (function(){
- let widget=null, token='', busy=false, requestId=crypto.randomUUID(), lastData='';
+ let widget=null, token='', busy=false, sent=false, requestId=crypto.randomUUID(), lastData='';
  const status=message=>{document.getElementById('result').textContent=message;};
  const config=window.JouwRitEmailConfig||{};
  window.jouwritOnlineEnabled=false;
@@ -10,7 +10,7 @@
  };
  if(config.endpoint&&config.turnstileSiteKey){const script=document.createElement('script');script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=initJouwRitEmail&render=explicit';script.async=true;script.onerror=()=>status('De spamcontrole kon niet laden. Neem contact op met info@jouwrit.nl.');document.head.append(script);}
  window.sendJouwRitBooking=async function(data){
-  if(busy)return;
+  if(busy||sent)return;
   if(!config.endpoint||!config.turnstileSiteKey){status('Boeken per e-mail is tijdelijk niet beschikbaar. Neem contact op met info@jouwrit.nl.');return;}
   if(!token){status('De beveiligingscontrole is nog bezig. Wacht even en probeer opnieuw.');return;}
   const serialized=JSON.stringify(data);if(lastData&&lastData!==serialized)requestId=crypto.randomUUID();lastData=serialized;
@@ -19,9 +19,14 @@
    const response=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,token,requestId}),signal:AbortSignal.timeout(35000)});
    const result=await response.json();
    if(!response.ok||!result.ok)throw new Error(result.error||'Verzenden is niet bevestigd. Probeer opnieuw of neem contact op met info@jouwrit.nl.');
-   status('Bedankt! Uw aanvraag is ontvangen. Referentie: '+result.reference+'. U ontvangt een ontvangstbevestiging per e-mail. Uw rit is pas definitief na onze bevestiging.');
-   button.textContent='Aanvraag ontvangen'; // Keep disabled to prevent an accidental second booking.
+   sent=true;
+   document.getElementById('successReference').textContent=result.reference;
+   document.getElementById('bookingFields').hidden=true;
+   const success=document.getElementById('bookingSuccess');success.hidden=false;success.focus();
+   document.querySelector('.booking-banner .sub').textContent='Bedankt voor uw aanvraag.';
+   success.scrollIntoView({behavior:'smooth',block:'center'});
+   button.textContent='Aanvraag ontvangen';
   }catch(error){status(error.name==='TimeoutError'||error instanceof TypeError?'Verzenden is niet bevestigd. Probeer opnieuw met dezelfde gegevens of neem contact op met info@jouwrit.nl.':error.message);button.disabled=false;}
-  finally{busy=false;token='';if(widget!==null&&window.turnstile)turnstile.reset(widget);}
+  finally{busy=false;token='';if(!sent&&widget!==null&&window.turnstile)turnstile.reset(widget);}
  };
 })();

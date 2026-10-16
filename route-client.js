@@ -38,6 +38,15 @@ window.JouwRit=(()=>{
  }
  // Named places remain selectable even when the external suggestion service is slow.
  // Coordinates are looked up only when the customer calculates the route.
+ // Separate road-accessible taxi stands; do not route both sides to the station centroid.
+ const stationPlaces=[
+  {display_name:'Eindhoven station – Stationsplein (centrumzijde)',lat:51.442149999,lon:5.47997},
+  {display_name:'Eindhoven station – Kennedyplein (buszijde)',lat:51.44406405,lon:5.479286908}
+ ];
+ function stationSuggestions(query){
+  const words=normalize(query).trim().split(/\s+/);
+  return stationPlaces.filter(p=>words.every(w=>normalize(p.display_name+' eindhoven centraal cs treinstation').includes(w)));
+ }
  const namedPlaces=[
   ['Düsseldorf Airport (DUS), Düsseldorf, Duitsland','dusseldorf dusseldorf airport flughafen dus'],
   ['Düsseldorf, Duitsland','dusseldorf dusseldorf centrum'],
@@ -92,7 +101,7 @@ window.JouwRit=(()=>{
   if(signal?.aborted)throw new DOMException('Search cancelled','AbortError');
   const key=query.toLocaleLowerCase('nl');
   if(suggestionsCache.has(key)){const cached=suggestionsCache.get(key);onUpdate(cached);return cached;}
-  const named=namedSuggestions(query),groups=[[],[]];
+  const named=[...stationSuggestions(query),...namedSuggestions(query)],groups=[[],[]];
   function merge(){
    const points=[],seen=new Set();
    for(let point of [...named,...groups[0].slice(0,3),...groups[1],...groups[0].slice(3)]){
@@ -182,6 +191,9 @@ window.JouwRit=(()=>{
  async function resolve(value){
   // Ignore a generic airfield centroid, including one carried over from an old URL.
   if(isEindhovenTerminal(value.address))return resolveEindhovenTerminal();
+  const station=stationPlaces.find(p=>normalize(p.display_name)===normalize(value.address));
+  if(station)return {lat:station.lat,lon:station.lon,name:station.display_name};
+  if(/^(?:eindhoven (?:station|centraal|cs)|(?:station|centraal|cs) eindhoven)$/i.test(value.address.trim()))throw new Error('Kies bij Eindhoven station de centrumzijde (Stationsplein) of buszijde (Kennedyplein) uit de suggesties.');
   if(value.point)return value.point;
   if(value.pdokId){
    const data=await json('https://api.pdok.nl/bzk/locatieserver/search/v3_1/lookup?id='+encodeURIComponent(value.pdokId)+'&fl=centroide_ll,weergavenaam');
